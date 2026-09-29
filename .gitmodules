@@ -1,0 +1,6 @@
+[submodule "vendor/hs108-brand-catalogue"]
+	path = vendor/hs108-brand-catalogue
+	url = https://github.com/error420notfound/hs108-brand-catalogue.git
+[submodule "vendor/chroma-catalogue"]
+	path = vendor/chroma-catalogue
+	url = https://github.com/error420notfound/chroma-catalogue.git

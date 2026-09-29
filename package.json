@@ -1,0 +1,38 @@
+{
+  "name": "hs108-brand-presentations",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@11.13.0",
+  "engines": {
+    "node": "24.21.0",
+    "npm": "11.13.0"
+  },
+  "scripts": {
+    "dev": "node scripts/site.mjs dev web15",
+    "dev:client20": "node scripts/site.mjs dev client20",
+    "dev:client30": "node scripts/site.mjs dev client30",
+    "build": "node scripts/site.mjs build all",
+    "build:public": "node scripts/site.mjs build web15",
+    "build:client20": "node scripts/site.mjs build client20",
+    "build:client30": "node scripts/site.mjs build client30",
+    "preview:public": "node scripts/site.mjs preview web15",
+    "preview:client20": "node scripts/site.mjs preview client20",
+    "preview:client30": "node scripts/site.mjs preview client30",
+    "validate": "node --import tsx scripts/validate.ts",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "7.3.5",
+    "gsap": "3.15.0",
+    "lottie-web": "5.13.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.19.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}

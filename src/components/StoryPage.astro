@@ -1,0 +1,63 @@
+---
+import type { Asset, ContentBlock, Edition, Page, Project } from '../lib/catalogue.ts';
+import { assetUrl, getAsset } from '../lib/catalogue.ts';
+import { sectionAt } from '../lib/sections.ts';
+import type { EditionId } from '../lib/catalogue.ts';
+import type { ResolvedColor } from '../lib/chroma.ts';
+import PageFrame from './PageFrame.astro';
+import AssetFigure from './AssetFigure.astro';
+import MotionFigure from './MotionFigure.astro';
+import ColorValues from './ColorValues.astro';
+import HandoverHub from './HandoverHub.astro';
+
+interface Props {
+  page: Page; block: ContentBlock; index: number; edition: Edition;
+  editionId: EditionId; project: Project; colors: ResolvedColor[]; revision: string;
+}
+const { page, block, index, edition, editionId, project, colors, revision } = Astro.props;
+const audience = edition.audience;
+const assets = block.assetIds.map((id) => getAsset(id, audience));
+const visuals = assets.filter((asset) => asset.motion || asset.mediaType.startsWith('image/'));
+const coverMark = page.template === 'cover' ? visuals.find((asset) => asset.id === 'wordmark') : undefined;
+let displayed = page.template === 'cover' ? visuals.filter((asset) => asset.id !== 'wordmark') : visuals;
+type Panel = { asset: Asset; slice?: number; sliceCount?: number };
+let panels: Panel[] = displayed.map((asset) => ({ asset }));
+if (page.layout === 'pure-comparison' && displayed.length === 1) panels = [0, 1].map((slice) => ({ asset: displayed[0], slice, sliceCount: 2 }));
+const selectedColors = block.colorRoles.map((role) => colors.find((color) => color.role === role)).filter((color): color is ResolvedColor => Boolean(color));
+const hasSecondary = panels.length > 1;
+const hasTertiary = panels.length > 2;
+const hasFooter = selectedColors.length > 0 || block.links.length > 0 || page.template === 'type-rules';
+const isHub = page.template === 'handover-hub';
+const hasCaption = Boolean(block.caption);
+const number = String(index + 1).padStart(2, '0');
+---
+
+<section class="story-page" id={page.id} data-page-id={page.id} data-page-index={index} data-page-title={block.title} data-section={sectionAt(editionId, index)} data-transition={page.transition ?? 'fade'} hidden={index !== 0} aria-label={`${number}. ${block.title}`}>
+  <PageFrame layout={page.layout} hasSecondary={hasSecondary && !isHub} hasTertiary={hasTertiary && !isHub} hasCaption={hasCaption} hasFooter={hasFooter}>
+    <div slot="intro" class="page-intro">
+      <p class="page-eyebrow"><span>{number} / {String(edition.pages.length).padStart(2, '0')}</span><span>{block.eyebrow ?? sectionAt(editionId, index)}</span></p>
+      {coverMark && <img class="cover-wordmark" src={assetUrl(coverMark)} alt={coverMark.alt} />}
+      {index === 0 ? <h1>{block.title}</h1> : <h2>{block.title}</h2>}
+      <p class="page-body">{block.body}</p>
+      {page.template === 'cover' && <p class="sample-note">{project.metadata.fictionalNotice}</p>}
+    </div>
+    {isHub ? <div slot="hero" class="hub-panel"><HandoverHub project={project} colors={colors} revision={revision} /></div> :
+      panels[0] && <div slot="hero" class="media-panel">
+        {panels[0].asset.motion ? <MotionFigure asset={panels[0].asset} /> : <AssetFigure asset={panels[0].asset} priority={index === 0} slice={panels[0].slice} sliceCount={panels[0].sliceCount} />}
+      </div>}
+    {hasSecondary && !isHub && <div slot="secondary" class="media-panel">
+      {panels[1].asset.motion ? <MotionFigure asset={panels[1].asset} /> : <AssetFigure asset={panels[1].asset} slice={panels[1].slice} sliceCount={panels[1].sliceCount} />}
+    </div>}
+    {hasTertiary && !isHub && <div slot="tertiary" class="media-panel">
+      {panels[2].asset.motion ? <MotionFigure asset={panels[2].asset} /> : <AssetFigure asset={panels[2].asset} slice={panels[2].slice} sliceCount={panels[2].sliceCount} />}
+    </div>}
+    {hasCaption && <p slot="caption" class="page-caption">{block.caption}</p>}
+    {hasFooter && <div slot="footer" class="page-extra">
+      {selectedColors.length > 0 && <ColorValues colors={selectedColors} detailed={audience === 'client'} />}
+      {page.template === 'type-rules' && <div class="type-rules">
+        {project.fonts.map((font) => <div><span>{font.role}</span><strong style={`font-family:'${font.family}',${font.fallback}`}>{font.specimen}</strong><small>{font.family} · {font.weights.join(', ')} · <a href={font.sourceUrl} target="_blank" rel="noopener noreferrer">Source and license ↗</a></small></div>)}
+      </div>}
+      {block.links.length > 0 && <div class="action-links">{block.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}<span aria-hidden="true">↗</span></a>)}</div>}
+    </div>}
+  </PageFrame>
+</section>

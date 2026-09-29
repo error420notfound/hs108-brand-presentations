@@ -1,0 +1,8 @@
+---
+import { catalogueProject, type EditionId } from '../lib/catalogue.ts';
+const edition = (process.env.PRESENTATION_EDITION || 'web15') as EditionId;
+const base = (import.meta as ImportMeta & { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/';
+const href = `${base}work/${catalogueProject.slug}/${edition}/`;
+---
+
+<!doctype html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta http-equiv="refresh" content={`0; url=${href}`} /><title>Opening {catalogueProject.metadata.name} · HS108</title></head><body><a href={href}>Open the {catalogueProject.metadata.name} presentation</a></body></html>

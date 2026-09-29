@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import type { Edition, EditionId, Project } from '../lib/catalogue.ts';
+import { sectionsFor } from '../lib/sections.ts';
+import type { ResolvedColor } from '../lib/chroma.ts';
+
+interface Props { project: Project; edition: Edition; editionId: EditionId; colors: ResolvedColor[] }
+const { project, edition, editionId, colors } = Astro.props;
+const palette = Object.fromEntries(colors.map((color) => [color.role, color.hex]));
+const style = `--paper:${palette.paper};--leaf:${palette.leaf};--ink:${palette.ink};--warmth:${palette.warmth};--fresh-leaf:${palette['fresh-leaf']}`;
+const fontHref = 'https://fonts.googleapis.com/css2?' + project.fonts
+  .map((font) => `family=${encodeURIComponent(font.family).replace(/%20/g, '+')}:wght@${font.weights.join(';')}`)
+  .join('&') + '&display=swap';
+const sections = sectionsFor(editionId);
+const editionLabel = editionId === 'web15' ? 'Public showcase' : editionId === 'client20' ? 'Standard handover' : 'Full handover';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content={palette.paper} />
+    <meta name="description" content={`${project.metadata.name}: ${project.metadata.proposition} Fictional HS108 sample project.`} />
+    <title>{project.metadata.name} — {editionLabel} · HS108</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontHref} />
+  </head>
+  <body style={style}>
+    <a class="skip-link" href="#presentation">Skip to presentation</a>
+    <div class="book" data-presentation-controller data-edition={editionId}>
+      <header class="topbar">
+        <div class="publisher"><strong>HS108</strong><span class="topbar-rule" aria-hidden="true"></span><span>Brand presentation system</span></div>
+        <div class="topbar-right"><span class="fiction-label">Fictional sample</span><span class="edition-label">{editionLabel}</span><button id="section-toggle" type="button" aria-expanded="false" aria-controls="section-panel">Contents <span aria-hidden="true">⌄</span></button></div>
+      </header>
+      <main id="presentation" class="presentation" tabindex="-1"><slot /></main>
+      <nav class="transport" aria-label="Presentation controls">
+        <div class="transport-primary">
+          <button type="button" data-nav="previous" aria-label="Previous page"><span aria-hidden="true">←</span><span>Previous</span></button>
+          <p class="page-status" aria-live="polite"><span id="current-section">{sections[0].label}</span><span id="page-counter">01 / {String(edition.pages.length).padStart(2, '0')}</span></p>
+          <button type="button" data-nav="next" aria-label="Next page"><span>Next</span><span aria-hidden="true">→</span></button>
+        </div>
+        <div class="transport-secondary">
+          <button type="button" id="play-toggle" hidden>Play animation</button>
+          <a id="page-permalink" href={`#${edition.pages[0].id}`} aria-label="Link to current page">Page link ↗</a>
+          <button type="button" id="fullscreen-toggle" aria-label="Enter presentation mode">Present <span aria-hidden="true">⛶</span></button>
+        </div>
+      </nav>
+      <div id="section-panel" class="section-panel" hidden>
+        <div class="section-panel-head"><p class="micro-label">Navigate the book</p><button id="section-close" type="button" aria-label="Close contents">×</button></div>
+        <nav aria-label="Sections and pages"><ol class="section-list">
+          {sections.map((section, sectionIndex) => {
+            const end = sections[sectionIndex + 1]?.start ?? edition.pages.length;
+            return <li><h2>{section.label}</h2><ol>
+              {edition.pages.slice(section.start, end).map((page, offset) => <li><a href={`#${page.id}`} data-page-link data-page-id={page.id}><span>{String(section.start + offset + 1).padStart(2, '0')}</span><span>{page.id.split('-').slice(1).join(' ').replaceAll('-', ' ')}</span></a></li>)}
+            </ol></li>;
+          })}
+        </ol></nav>
+      </div>
+      <dialog id="image-inspector" class="image-inspector" aria-label="Image inspection">
+        <button id="inspector-close" class="inspector-close" type="button" aria-label="Close image inspection">Close ×</button>
+        <img id="inspector-image" alt="" />
+        <p id="inspector-caption"></p>
+      </dialog>
+      <p id="interaction-announcement" class="sr-only" role="status" aria-live="polite"></p>
+    </div>
+    <script>import '../scripts/presentation-controller.ts';</script>
+  </body>
+</html>

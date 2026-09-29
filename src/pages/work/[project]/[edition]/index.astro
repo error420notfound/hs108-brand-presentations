@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import PresentationShell from '../../../../layouts/PresentationShell.astro';
+import StoryPage from '../../../../components/StoryPage.astro';
+import { catalogueProject, getEdition, type EditionId } from '../../../../lib/catalogue.ts';
+import { chromaRevision, resolveColors } from '../../../../lib/chroma.ts';
+
+export function getStaticPaths() {
+  const editionId = (process.env.PRESENTATION_EDITION || 'web15') as EditionId;
+  if (!['web15', 'client20', 'client30'].includes(editionId)) throw new Error(`Invalid edition ${editionId}`);
+  return [{ params: { project: catalogueProject.slug, edition: editionId }, props: { editionId } }];
+}
+
+const { editionId } = Astro.props;
+const project = catalogueProject;
+const edition = getEdition(editionId);
+const story = new Map((await getCollection('story')).map((entry) => [entry.id, entry.data]));
+const colors = resolveColors(project);
+const revision = chromaRevision();
+---
+
+<PresentationShell project={project} edition={edition} editionId={editionId} colors={colors}>
+  {edition.pages.map((page, index) => {
+    const block = story.get(page.contentRefs[0]);
+    if (!block) throw new Error(`Missing story content ${page.contentRefs[0]}`);
+    return <StoryPage page={page} block={block} index={index} edition={edition} editionId={editionId} project={project} colors={colors} revision={revision} />;
+  })}
+</PresentationShell>

@@ -1,0 +1,15 @@
+---
+import { assetUrl, getAsset, type Asset } from '../lib/catalogue.ts';
+
+interface Props { asset: Asset }
+const { asset } = Astro.props;
+const poster = getAsset(asset.motion!.posterAssetId, 'public');
+---
+
+<figure class="motion-figure gallery-entry" data-motion-stage data-lottie-src={assetUrl(asset)}>
+  <div class="motion-canvas">
+    <img class="motion-poster" src={assetUrl(poster)} alt={poster.alt} loading="lazy" />
+    <div class="lottie-container" aria-hidden="true"></div>
+  </div>
+  <figcaption>{asset.caption} <span>Use Play animation below.</span></figcaption>
+</figure>

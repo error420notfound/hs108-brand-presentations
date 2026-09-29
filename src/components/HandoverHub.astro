@@ -1,0 +1,50 @@
+---
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { assetUrl, type Project } from '../lib/catalogue.ts';
+import type { ResolvedColor } from '../lib/chroma.ts';
+
+interface Props { project: Project; colors: ResolvedColor[]; revision: string }
+const { project, colors, revision } = Astro.props;
+const downloads = project.assets.filter((asset) => asset.download && asset.audience.includes('client'));
+const guide = downloads.find((asset) => asset.id === 'client-guide');
+const guideText = guide ? readFileSync(resolve(process.cwd(), 'vendor/hs108-brand-catalogue', guide.path), 'utf8') : '';
+const usage = guideText.split('## Basic use')[1]?.split('## Vendor checklist')[0]?.trim().split(/\n\s*\n/).map((text) => text.replaceAll('`', '')) ?? [];
+---
+
+<div class="handover-hub">
+  <div class="handover-head">
+    <p class="micro-label">Approved sample files · version {project.metadata.version}</p>
+    <h3>Everything needed to carry the system forward.</h3>
+    <p>Download the source files with their usage notes. This is a fictional HS108 sample package.</p>
+  </div>
+  <div class="handover-columns">
+    <section aria-labelledby="download-title">
+      <h4 id="download-title">Files</h4>
+      <ul class="download-list">
+        {downloads.map((asset) => <li>
+          <a href={assetUrl(asset)} download={asset.path.split('/').at(-1)}>
+            <span><strong>{asset.caption}</strong><small>{asset.path.split('/').at(-1)}</small></span>
+            <span aria-hidden="true">↓</span>
+          </a>
+        </li>)}
+      </ul>
+    </section>
+    <div class="handover-notes">
+      <section aria-labelledby="usage-title">
+        <h4 id="usage-title">Usage notes</h4>
+        {usage.map((paragraph) => <p>{paragraph}</p>)}
+      </section>
+      <section aria-labelledby="font-title">
+        <h4 id="font-title">Type sources and licensing</h4>
+        <ul class="font-sources">
+          {project.fonts.map((font) => <li><a href={font.sourceUrl} target="_blank" rel="noopener noreferrer">{font.family} ↗</a><span>{font.role} · {font.license}</span></li>)}
+        </ul>
+      </section>
+    </div>
+  </div>
+  <div class="handover-tail">
+    <div><h4>Color values</h4><p>{colors.map((color) => `${color.role} ${color.hex}`).join(' · ')}</p><small>Display P3 values are derived from sRGB in the pinned source. CMYK requires approved production data.</small></div>
+    <div><h4>Credits and version</h4><p>HS108 sample artwork. Concept images generated for this fictional project with OpenAI image generation. No client engagement is represented.</p><small>Catalogue v{project.metadata.version} · Chroma {revision.slice(0, 12)}</small></div>
+  </div>
+</div>
