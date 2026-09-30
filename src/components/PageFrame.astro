@@ -1,8 +1,8 @@
 ---
 import type { Page } from '../lib/catalogue.ts';
 
-interface Props { layout: Page['layout']; hasSecondary: boolean; hasTertiary: boolean; hasCaption: boolean; hasFooter: boolean }
-const { layout, hasSecondary, hasTertiary, hasCaption, hasFooter } = Astro.props;
+interface Props { layout: Page['layout']; hasSecondary: boolean; hasTertiary: boolean; hasCaption: boolean; hasFooter: boolean; hasSupport: boolean }
+const { layout, hasSecondary, hasTertiary, hasCaption, hasFooter, hasSupport } = Astro.props;
 ---
 
 <div class:list={['page-grid', `layout-${layout}`, { 'has-secondary': hasSecondary, 'has-tertiary': hasTertiary, 'has-caption': hasCaption, 'has-footer': hasFooter }]}>
@@ -10,6 +10,7 @@ const { layout, hasSecondary, hasTertiary, hasCaption, hasFooter } = Astro.props
   <div class="slot slot-hero"><slot name="hero" /></div>
   {hasSecondary && <div class="slot slot-secondary"><slot name="secondary" /></div>}
   {hasTertiary && <div class="slot slot-tertiary"><slot name="tertiary" /></div>}
+  {hasSupport && <div class="slot slot-support"><slot name="support" /></div>}
   {hasCaption && <div class="slot slot-caption"><slot name="caption" /></div>}
   {hasFooter && <div class="slot slot-footer"><slot name="footer" /></div>}
 </div>

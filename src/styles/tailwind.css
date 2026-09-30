@@ -27,27 +27,26 @@
 .page-grid .slot { @apply min-h-0 min-w-0; }
 .page-grid .slot-intro { @apply col-span-4 row-start-1 border-t-2 border-interface-leaf pt-[clamp(18px,2.2vw,32px)] pr-[clamp(16px,2vw,32px)]; }
 .page-grid .slot-hero { @apply col-span-8 row-start-1; }
+.page-grid .slot-support { @apply col-span-4 col-start-1 row-start-2 self-start; }
 .page-grid .slot-caption { @apply col-span-5 self-start border-t border-interface-rule pt-2.5; }
 .page-grid .slot-footer { @apply col-span-3 self-start border-t border-interface-rule pt-2.5; }
 .page-grid:not(.has-caption) .slot-footer { @apply col-start-5 col-span-8; }
-.page-grid.has-secondary:not(.has-tertiary):not(.layout-split-field):not(.layout-full-field) .slot-hero,
-.page-grid.has-secondary:not(.has-tertiary):not(.layout-split-field):not(.layout-full-field) .slot-secondary { @apply col-span-6; }
-.page-grid.has-secondary:not(.has-tertiary):not(.layout-split-field):not(.layout-full-field) .slot-secondary { @apply col-start-7 row-start-1; }
-.page-grid.has-tertiary:not(.layout-split-field):not(.layout-full-field):not(.layout-triple-gallery) .slot-hero,
-.page-grid.has-tertiary:not(.layout-split-field):not(.layout-full-field):not(.layout-triple-gallery) .slot-secondary,
-.page-grid.has-tertiary:not(.layout-split-field):not(.layout-full-field):not(.layout-triple-gallery) .slot-tertiary { @apply col-span-4; }
-.page-grid.has-tertiary:not(.layout-split-field):not(.layout-full-field):not(.layout-triple-gallery) .slot-secondary { @apply col-start-5 row-start-1; }
-.page-grid.has-tertiary:not(.layout-split-field):not(.layout-full-field):not(.layout-triple-gallery) .slot-tertiary { @apply col-start-9 row-start-1; }
 .page-grid:is(.layout-split-field,.layout-full-field) { @apply grid-rows-[minmax(0,1fr)_auto]; }
 .page-grid:is(.layout-split-field,.layout-full-field) .slot-intro { @apply col-span-4 row-start-1; }
 .page-grid:is(.layout-split-field,.layout-full-field) .slot-hero { @apply col-span-8 col-start-5 row-start-1; }
-.page-grid:is(.layout-split-field,.layout-full-field) .slot-secondary { @apply col-span-4 row-start-2; }
+.page-grid:is(.layout-split-field,.layout-full-field).has-secondary .slot-hero { @apply col-span-4 col-start-5 row-start-1; }
+.page-grid:is(.layout-split-field,.layout-full-field) .slot-secondary { @apply col-span-4 col-start-9 row-start-1; }
 .page-grid:is(.layout-split-field,.layout-full-field) .slot-caption { @apply col-span-5 col-start-5 row-start-2; }
 .page-grid:is(.layout-split-field,.layout-full-field) .slot-footer { @apply col-span-3 col-start-10 row-start-2; }
+.page-grid:is(.layout-split-field,.layout-full-field):not(.has-caption) .slot-footer { @apply col-span-8 col-start-5; }
 .page-grid:is(.layout-header-field,.layout-framed-image,.layout-double-gallery,.layout-triple-gallery,.layout-pure-comparison) { @apply grid-rows-[auto_minmax(0,1fr)_auto]; }
 .page-grid:is(.layout-header-field,.layout-framed-image,.layout-double-gallery,.layout-triple-gallery,.layout-pure-comparison) .slot-intro { @apply col-span-12 row-start-1 border-t-2 border-[var(--leaf)] pt-4; }
 .page-grid:is(.layout-header-field,.layout-framed-image,.layout-double-gallery,.layout-triple-gallery,.layout-pure-comparison) .slot-hero { @apply col-span-6 col-start-1 row-start-2; }
 .page-grid:is(.layout-header-field,.layout-framed-image,.layout-double-gallery,.layout-triple-gallery,.layout-pure-comparison) .slot-secondary { @apply col-span-6 col-start-7 row-start-2; }
+.page-grid:is(.layout-header-field,.layout-framed-image,.layout-double-gallery):not(.has-secondary) .slot-hero { @apply col-span-8; }
+.page-grid.layout-double-gallery.has-tertiary .slot-hero { @apply col-span-4 col-start-1 row-start-2; }
+.page-grid.layout-double-gallery.has-tertiary .slot-secondary { @apply col-span-4 col-start-5 row-start-2; }
+.page-grid.layout-double-gallery.has-tertiary .slot-tertiary { @apply col-span-4 col-start-9 row-start-2; }
 .page-grid.layout-triple-gallery .slot-hero { @apply col-span-4 col-start-1 row-start-2; }
 .page-grid.layout-triple-gallery .slot-secondary { @apply col-span-4 col-start-5 row-start-2; }
 .page-grid.layout-triple-gallery .slot-tertiary { @apply col-span-4 col-start-9 row-start-2; }
@@ -75,12 +74,13 @@
 .story-page[data-template="cover"] .page-grid { @apply grid-rows-[minmax(0,1fr)_auto]; }
 .story-page[data-template="cover"] .slot-intro { @apply col-span-4 row-start-1 flex flex-col border-t-0 border-r border-interface-rule pt-0 pr-[clamp(20px,3vw,52px)]; }
 .story-page[data-template="cover"] .slot-hero { @apply col-span-8 col-start-5 row-start-1; }
+.story-page[data-template="cover"] .slot-caption { @apply col-span-8 col-start-5 row-start-2; }
 .story-page[data-template="cover"] .page-intro { @apply h-full gap-[clamp(24px,5vh,64px)]; }
 .story-page[data-template="cover"] .page-eyebrow { @apply text-interface-muted; }
 .story-page[data-template="cover"] .page-message { @apply gap-[clamp(18px,3vh,32px)]; }
 .story-page[data-template="cover"] .page-message h1 { @apply max-w-[11ch] text-[clamp(2.6rem,4.05vw,4.55rem)] leading-[1.03]; }
 .story-page[data-template="cover"] .page-body { @apply max-w-[38ch] text-[clamp(.95rem,1.08vw,1.1rem)]; }
-.cover-support { @apply mt-auto flex w-full flex-col gap-4 border-t border-interface-rule pt-4; }
+.cover-support { @apply flex w-full flex-col gap-3 border-t border-interface-rule pt-3; }
 .sample-note { @apply flex max-w-[42ch] flex-col gap-1 text-[.69rem] leading-[1.45] text-interface-muted; }
 .story-page[data-template="cover"] .asset-figure .inspect-trigger { @apply bg-interface-stage; }
 
@@ -165,6 +165,8 @@ body:has(.book.window-present) { overflow: hidden; }
 .download-list li { @apply border-t border-interface-rule; }
 .download-list li:last-child { @apply border-b border-interface-rule; }
 .download-list a { @apply flex min-h-[52px] items-center justify-between gap-3 py-2 no-underline; }
+.download-list a span { @apply grid min-w-0 gap-0.5; }
+.download-list a strong { @apply text-sm leading-snug; }
 .download-list small, .handover-tail small, .font-sources li { @apply text-xs leading-snug text-interface-muted; }
 .handover-notes { @apply grid content-start gap-5; }
 .font-sources li { @apply mb-2 grid gap-1; }
@@ -188,6 +190,9 @@ body:has(.book.window-present) { overflow: hidden; }
   html, body { height: 100%; overflow: hidden; }
   .book { @apply h-dvh; }
   .story-page, .page-grid { @apply overflow-hidden; }
+  .story-page:has(.hub-panel) { @apply overflow-y-auto; }
+  .story-page:has(.hub-panel) .page-grid { @apply h-auto min-h-full grid-rows-[auto_auto] overflow-visible; }
+  .story-page:has(.hub-panel) .hub-panel { @apply h-auto; }
 }
 @media (max-width: 899px) {
   .topbar { @apply grid-cols-4 py-1; }
@@ -199,6 +204,13 @@ body:has(.book.window-present) { overflow: hidden; }
   .page-grid:is(.layout-split-field,.layout-full-field,.layout-header-field,.layout-framed-image,.layout-double-gallery,.layout-triple-gallery,.layout-pure-comparison) { @apply h-auto grid-cols-4 grid-rows-none gap-y-4; }
   .page-grid .slot,
   .page-grid:is(.layout-split-field,.layout-full-field,.layout-header-field,.layout-framed-image,.layout-double-gallery,.layout-triple-gallery,.layout-pure-comparison) .slot { @apply col-span-4 col-start-1 row-auto h-auto w-auto; }
+  .page-grid:is(.layout-split-field,.layout-full-field) .slot-intro,
+  .page-grid:is(.layout-split-field,.layout-full-field) .slot-hero,
+  .page-grid:is(.layout-split-field,.layout-full-field).has-secondary .slot-hero,
+  .page-grid:is(.layout-split-field,.layout-full-field) .slot-secondary,
+  .page-grid:is(.layout-split-field,.layout-full-field) .slot-caption,
+  .page-grid:is(.layout-split-field,.layout-full-field) .slot-footer { @apply col-span-4 col-start-1 row-auto; }
+  .page-grid:is(.layout-split-field,.layout-full-field):not(.has-caption) .slot-footer { @apply col-span-4 col-start-1 row-auto; }
   .page-grid .slot-intro { @apply border-t-2 border-interface-leaf py-4 pr-0; }
   .page-grid .page-intro { @apply h-auto gap-4; }
   .page-grid:is(.layout-header-field,.layout-framed-image,.layout-double-gallery,.layout-triple-gallery,.layout-pure-comparison) .page-intro,
@@ -206,12 +218,16 @@ body:has(.book.window-present) { overflow: hidden; }
   .page-grid.layout-triple-gallery .slot-hero,
   .page-grid.layout-triple-gallery .slot-secondary,
   .page-grid.layout-triple-gallery .slot-tertiary { @apply col-span-4 col-start-1 row-auto; }
+  .page-grid.layout-double-gallery.has-tertiary .slot-hero,
+  .page-grid.layout-double-gallery.has-tertiary .slot-secondary,
+  .page-grid.layout-double-gallery.has-tertiary .slot-tertiary { @apply col-span-4 col-start-1 row-auto; }
   .page-grid .slot-intro { @apply order-1; }
   .page-grid .slot-hero { @apply order-2; }
   .page-grid .slot-secondary { @apply order-3; }
   .page-grid .slot-tertiary { @apply order-4; }
-  .page-grid .slot-caption { @apply order-5; }
-  .page-grid .slot-footer { @apply order-6; }
+  .page-grid .slot-support { @apply order-5; }
+  .page-grid .slot-caption { @apply order-6; }
+  .page-grid .slot-footer { @apply order-7; }
   .page-message { @apply gap-4; }
   .page-message h1, .page-message h2 { @apply text-[clamp(2.35rem,8vw,4rem)]; }
   .page-body { @apply max-w-[58ch] text-base; }
@@ -223,6 +239,8 @@ body:has(.book.window-present) { overflow: hidden; }
   .story-page[data-template="cover"] .page-intro { @apply h-auto gap-5; }
   .story-page[data-template="cover"] .page-message h1 { @apply text-[clamp(2.75rem,9vw,4.5rem)]; }
   .cover-support { @apply mt-2 flex-row items-end justify-between gap-5; }
+  .story-page[data-template="cover"] .slot-support { @apply order-3; }
+  .story-page[data-template="cover"] .slot-caption { @apply order-4; }
   .sample-note { @apply max-w-[40ch]; }
   .transport { @apply grid-cols-4 grid-rows-[44px_44px] gap-0; }
   .transport-primary { @apply col-span-4 row-start-1 justify-between gap-1; }

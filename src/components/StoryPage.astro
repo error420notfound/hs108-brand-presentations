@@ -34,18 +34,18 @@ const number = String(index + 1).padStart(2, '0');
 ---
 
 <section class="story-page" id={page.id} data-page-id={page.id} data-page-index={index} data-page-title={block.title} data-section={sectionAt(editionId, index)} data-transition={page.transition ?? 'fade'} data-template={page.template} hidden={index !== 0} aria-label={`${number}. ${block.title}`}>
-  <PageFrame layout={page.layout} hasSecondary={hasSecondary && !isHub} hasTertiary={hasTertiary && !isHub} hasCaption={hasCaption} hasFooter={hasFooter}>
+  <PageFrame layout={page.layout} hasSecondary={hasSecondary && !isHub} hasTertiary={hasTertiary && !isHub} hasCaption={hasCaption} hasFooter={hasFooter} hasSupport={page.template === 'cover'}>
     <div slot="intro" class="page-intro">
       <p class="page-eyebrow"><span>{number} / {String(edition.pages.length).padStart(2, '0')}</span><span>{block.eyebrow ?? sectionAt(editionId, index)}</span></p>
       <div class="page-message">
         {index === 0 ? <h1 tabindex="-1">{block.title}</h1> : <h2 tabindex="-1">{block.title}</h2>}
         <p class="page-body">{block.body}</p>
       </div>
-      {page.template === 'cover' && <div class="cover-support">
-        {coverMark && <img class="cover-wordmark" src={assetUrl(coverMark)} alt={coverMark.alt} />}
-        <p class="sample-note"><span class="font-bold uppercase tracking-[.1em] text-interface-ink">Project context</span>{project.metadata.fictionalNotice}</p>
-      </div>}
     </div>
+    {page.template === 'cover' && <div slot="support" class="cover-support">
+      {coverMark && <img class="cover-wordmark" src={assetUrl(coverMark)} alt={coverMark.alt} />}
+      <p class="sample-note"><span class="font-bold uppercase tracking-[.1em] text-interface-ink">Project context</span>{project.metadata.fictionalNotice}</p>
+    </div>}
     {isHub ? <div slot="hero" class="hub-panel"><HandoverHub project={project} colors={colors} revision={revision} /></div> :
       panels[0] && <div slot="hero" class="media-panel">
         {panels[0].asset.motion ? <MotionFigure asset={panels[0].asset} /> : <AssetFigure asset={panels[0].asset} priority={index === 0} slice={panels[0].slice} sliceCount={panels[0].sliceCount} />}
