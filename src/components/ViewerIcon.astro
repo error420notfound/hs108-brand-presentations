@@ -1,0 +1,24 @@
+---
+import arrowLeft from 'bootstrap-icons/icons/arrow-left.svg?raw';
+import arrowRight from 'bootstrap-icons/icons/arrow-right.svg?raw';
+import chevronDown from 'bootstrap-icons/icons/chevron-down.svg?raw';
+import xLg from 'bootstrap-icons/icons/x-lg.svg?raw';
+import zoomIn from 'bootstrap-icons/icons/zoom-in.svg?raw';
+import link45deg from 'bootstrap-icons/icons/link-45deg.svg?raw';
+import fullscreen from 'bootstrap-icons/icons/fullscreen.svg?raw';
+import fullscreenExit from 'bootstrap-icons/icons/fullscreen-exit.svg?raw';
+import play from 'bootstrap-icons/icons/play-fill.svg?raw';
+import pause from 'bootstrap-icons/icons/pause-fill.svg?raw';
+import boxArrowUpRight from 'bootstrap-icons/icons/box-arrow-up-right.svg?raw';
+import download from 'bootstrap-icons/icons/download.svg?raw';
+
+type Name = 'arrow-left' | 'arrow-right' | 'chevron-down' | 'x' | 'zoom-in' | 'link' | 'fullscreen' | 'fullscreen-exit' | 'play' | 'pause' | 'external' | 'download';
+interface Props { name: Name; class?: string }
+const { name, class: className } = Astro.props;
+const icons: Record<Name, string> = {
+  'arrow-left': arrowLeft, 'arrow-right': arrowRight, 'chevron-down': chevronDown,
+  x: xLg, 'zoom-in': zoomIn, link: link45deg, fullscreen, 'fullscreen-exit': fullscreenExit,
+  play, pause, external: boxArrowUpRight, download
+};
+---
+<span class:list={['viewer-icon', className]} aria-hidden="true" set:html={icons[name]} />

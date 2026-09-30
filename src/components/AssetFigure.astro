@@ -1,5 +1,6 @@
 ---
 import { assetUrl, type Asset } from '../lib/catalogue.ts';
+import ViewerIcon from './ViewerIcon.astro';
 
 interface Props { asset: Asset; priority?: boolean; slice?: number; sliceCount?: number }
 const { asset, priority = false, slice = 0, sliceCount = 1 } = Astro.props;
@@ -14,7 +15,7 @@ const sliceOffset = `${(-slice * 100) / sliceCount}%`;
 <figure class:list={['asset-figure', { raster: isRaster, vector: !isRaster, 'art-slice': sliceCount > 1, 'gallery-entry': sliceCount > 1 }]} style={`--focal-x:${focalX};--focal-y:${focalY};--slice-count:${sliceCount};--slice-offset:${sliceOffset}`}>
   <button class="inspect-trigger" type="button" data-inspect-src={src} data-inspect-alt={asset.alt} data-inspect-caption={asset.caption} aria-label={`Inspect ${asset.role}${sliceLabel}`}>
     <span class="asset-image-wrap"><img src={src} alt={asset.alt} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : undefined} /></span>
-    <span class="inspect-cue" aria-hidden="true">↗</span>
+    <span class="inspect-cue" aria-hidden="true"><ViewerIcon name="zoom-in" /></span>
   </button>
   <figcaption>{asset.caption}</figcaption>
 </figure>

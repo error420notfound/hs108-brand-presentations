@@ -9,6 +9,7 @@ import AssetFigure from './AssetFigure.astro';
 import MotionFigure from './MotionFigure.astro';
 import ColorValues from './ColorValues.astro';
 import HandoverHub from './HandoverHub.astro';
+import ViewerIcon from './ViewerIcon.astro';
 
 interface Props {
   page: Page; block: ContentBlock; index: number; edition: Edition;
@@ -37,7 +38,7 @@ const number = String(index + 1).padStart(2, '0');
     <div slot="intro" class="page-intro">
       <p class="page-eyebrow"><span>{number} / {String(edition.pages.length).padStart(2, '0')}</span><span>{block.eyebrow ?? sectionAt(editionId, index)}</span></p>
       {coverMark && <img class="cover-wordmark" src={assetUrl(coverMark)} alt={coverMark.alt} />}
-      {index === 0 ? <h1>{block.title}</h1> : <h2>{block.title}</h2>}
+      {index === 0 ? <h1 tabindex="-1">{block.title}</h1> : <h2 tabindex="-1">{block.title}</h2>}
       <p class="page-body">{block.body}</p>
       {page.template === 'cover' && <p class="sample-note">{project.metadata.fictionalNotice}</p>}
     </div>
@@ -55,9 +56,9 @@ const number = String(index + 1).padStart(2, '0');
     {hasFooter && <div slot="footer" class="page-extra">
       {selectedColors.length > 0 && <ColorValues colors={selectedColors} detailed={audience === 'client'} />}
       {page.template === 'type-rules' && <div class="type-rules">
-        {project.fonts.map((font) => <div><span>{font.role}</span><strong style={`font-family:'${font.family}',${font.fallback}`}>{font.specimen}</strong><small>{font.family} · {font.weights.join(', ')} · <a href={font.sourceUrl} target="_blank" rel="noopener noreferrer">Source and license ↗</a></small></div>)}
+        {project.fonts.map((font) => <div><span>{font.role}</span><strong style={`font-family:'${font.family}',${font.fallback}`}>{font.specimen}</strong><small>{font.family} · {font.weights.join(', ')} · <a href={font.sourceUrl} target="_blank" rel="noopener noreferrer">Source and license <ViewerIcon name="external" /></a></small></div>)}
       </div>}
-      {block.links.length > 0 && <div class="action-links">{block.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}<span aria-hidden="true">↗</span></a>)}</div>}
+      {block.links.length > 0 && <div class="action-links">{block.links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}<ViewerIcon name="external" /></a>)}</div>}
     </div>}
   </PageFrame>
 </section>

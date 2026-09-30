@@ -12,12 +12,13 @@ An Astro presentation for **Vesper Tea**, a clearly marked fictional HS108 sampl
 | TypeScript | `5.9.3` | Typed adapters and controller |
 | Zod | `4.6.5` | Catalogue and Chroma validation |
 | GSAP | `3.15.0` | Interruptible presentation and inspection transitions |
+| Bootstrap Icons | `1.13.1` | Individually imported viewer control icons |
 | lottie-web | `5.13.0` | Playback of the authored vector reveal |
 | tsx | `4.23.15` | Run validation and asset preparation scripts |
 | @astrojs/check | `0.9.10` | Astro and TypeScript diagnostics |
 | @types/node | `24.19.0` | Node script types |
 | @playwright/test | `1.63.0` | Browser tooling for local checks |
-| [HS108 catalogue](https://github.com/error420notfound/hs108-brand-catalogue) | `19a13e99832e6b5abe46b0c73b94877758c75593` | Project contract, content, pages, assets |
+| [HS108 catalogue](https://github.com/error420notfound/hs108-brand-catalogue) | `ee25aa613fc8dae6edf6c387b82e9ec44278f731` (local commit; publish before clean clone) | Project contract, content, pages, assets |
 | [Chroma catalogue](https://github.com/error420notfound/chroma-catalogue) | `22b9004f8042737a484c909ba7fe678b0a7e8f27` | Palette values |
 
 The public `web15` edition deploys to GitHub Pages on pushes to `main` and through manual workflow dispatch. The workflow publishes only `dist/public`; client handover outputs are not uploaded. The workflow adds `.nojekyll` so Astro's `_astro` asset directory is served. For this repository, the project site URL is `https://error420notfound.github.io/hs108-brand-presentations/` after Pages is enabled with **GitHub Actions** as its build source in repository Settings → Pages.
@@ -59,9 +60,9 @@ npm.cmd run build
 
 The build validates the source contract, pinned commits, Chroma references, page IDs and exact edition counts (15/20/30), asset audience, and download paths. It then stages only assets allowed for that edition in `.build-assets/<edition>`. After each build it scans the public output for client asset paths, client-only filenames, and handover-only content, or checks that every client handover download exists and is linked. The structured catalogue content is exposed through an Astro content collection; MDX is unnecessary for this ID-addressed source.
 
-## Presentation behavior
+## Viewer system and presentation behavior
 
-The seven catalogue layout names map to reusable Grid templates with named semantic slots. Desktop landscape uses one frame at supported sizes. Short desktop windows allow contained reading; portrait mobile uses natural vertical scrolling. The viewport includes safe areas, and controls adapt to dynamic viewport changes. There is no scroll based page advance.
+`src/styles/viewer.css` is the viewer's single active stylesheet. Its `--viewer-*` tokens define neutral backgrounds, text, borders, focus, control states, spacing and safe-area offsets. Project colors and fonts are reserved for artwork, color values and type specimens. The seven catalogue layout names remain intact: `split-field` and `full-field` use a statement pattern; the other layouts use evidence, comparison and system patterns. They share a 12-column desktop grid with `clamp(12px, 1.35vw, 22px)` gutters and `clamp(20px, 3.2vw, 56px)` outer margins. Statement pages allocate four columns to the message and eight to evidence; other pages place the message across all columns, then divide the evidence into one, two or three aligned panels. Captions and technical details follow in a supporting row. Below 900px the layout uses four columns and natural vertical reading; below 600px media panels occupy the full width. Short windows scroll without clipping content.
 
 Use the visible previous/next controls, Contents panel, page permalink, or Left/Right, Page Up/Down, Home/End keys. The URL fragment is a stable catalogue page ID, and Back/Forward restores page state. Motion is user started, pausable, and suppressed under reduced motion. The image inspection dialog has a visible close button and Escape support. Present uses the Fullscreen API after a click and falls back to an in-window mode if denied. The public and client outputs share templates and controls but have separate asset packages.
 
@@ -84,6 +85,7 @@ Update `source-pins.json`, the revisions above, and any typed adapters needed fo
 - `src/lib/catalogue.ts`, `src/lib/chroma.ts`: typed source adapters.
 - `src/content.config.ts`: Astro collection over the catalogue's structured content.
 - `src/components/PageFrame.astro`, `StoryPage.astro`: responsive page grammar and content mapping.
+- `src/components/ViewerIcon.astro`, `src/styles/viewer.css`: individually imported icons and neutral viewer tokens.
 - `src/scripts/presentation-controller.ts`: navigation, media, fullscreen, history, inspection.
 - `scripts/prepare-assets.ts`, `scripts/validate.ts`: audience staging and build checks.
 

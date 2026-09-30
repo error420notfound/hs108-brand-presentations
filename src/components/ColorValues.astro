@@ -1,18 +1,19 @@
 ---
 import type { ResolvedColor } from '../lib/chroma.ts';
+import ViewerIcon from './ViewerIcon.astro';
 
 interface Props { colors: ResolvedColor[]; detailed?: boolean }
 const { colors, detailed = false } = Astro.props;
 ---
 
-<div class:list={['color-values', { detailed }]} aria-label="Vesper color values">
+<div class:list={['color-values', { detailed }]} aria-label="Project color values">
   {colors.map((color) => <div class="color-entry">
     <span class="color-sample" style={`background:${color.hex}`} aria-hidden="true"></span>
     <div class="color-copy">
       <strong>{color.role.replace(/-/g, ' ')}</strong>
       <small>{color.sourceLabel}</small>
     </div>
-    <button type="button" class="copy-value" data-copy-value={color.hex} aria-label={`Copy ${color.role} HEX ${color.hex}`}>{color.hex} <span aria-hidden="true">↗</span></button>
+    <button type="button" class="copy-value" data-copy-value={color.hex} aria-label={`Copy ${color.role} HEX ${color.hex}`}>{color.hex} <ViewerIcon name="link" /></button>
     {detailed && <div class="color-technical">
       <span>{color.oklch}</span>
       {color.displayP3 && <span>{color.displayP3}</span>}

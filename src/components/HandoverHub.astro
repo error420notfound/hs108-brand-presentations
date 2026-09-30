@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { assetUrl, type Project } from '../lib/catalogue.ts';
 import type { ResolvedColor } from '../lib/chroma.ts';
+import ViewerIcon from './ViewerIcon.astro';
 
 interface Props { project: Project; colors: ResolvedColor[]; revision: string }
 const { project, colors, revision } = Astro.props;
@@ -25,7 +26,7 @@ const usage = guideText.split('## Basic use')[1]?.split('## Vendor checklist')[0
         {downloads.map((asset) => <li>
           <a href={assetUrl(asset)} download={asset.path.split('/').at(-1)}>
             <span><strong>{asset.caption}</strong><small>{asset.path.split('/').at(-1)}</small></span>
-            <span aria-hidden="true">↓</span>
+            <ViewerIcon name="download" />
           </a>
         </li>)}
       </ul>
@@ -38,7 +39,7 @@ const usage = guideText.split('## Basic use')[1]?.split('## Vendor checklist')[0
       <section aria-labelledby="font-title">
         <h4 id="font-title">Type sources and licensing</h4>
         <ul class="font-sources">
-          {project.fonts.map((font) => <li><a href={font.sourceUrl} target="_blank" rel="noopener noreferrer">{font.family} ↗</a><span>{font.role} · {font.license}</span></li>)}
+          {project.fonts.map((font) => <li><a href={font.sourceUrl} target="_blank" rel="noopener noreferrer">{font.family} <ViewerIcon name="external" /></a><span>{font.role} · {font.license}</span></li>)}
         </ul>
       </section>
     </div>
