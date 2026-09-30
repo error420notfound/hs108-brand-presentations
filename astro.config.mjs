@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import tailwind from '@tailwindcss/vite';
 
 const edition = process.env.PRESENTATION_EDITION || 'web15';
 const githubPages = process.env.GITHUB_PAGES === 'true';
@@ -14,6 +15,7 @@ export default defineConfig({
   publicDir: `./.build-assets/${edition}`,
   outDir: `./dist/${edition === 'web15' ? 'public' : edition}`,
   vite: {
+    plugins: [tailwind()],
     server: { fs: { allow: ['.'] } }
   }
 });

@@ -33,7 +33,7 @@ const hasCaption = Boolean(block.caption);
 const number = String(index + 1).padStart(2, '0');
 ---
 
-<section class="story-page" id={page.id} data-page-id={page.id} data-page-index={index} data-page-title={block.title} data-section={sectionAt(editionId, index)} data-transition={page.transition ?? 'fade'} hidden={index !== 0} aria-label={`${number}. ${block.title}`}>
+<section class="story-page" id={page.id} data-page-id={page.id} data-page-index={index} data-page-title={block.title} data-section={sectionAt(editionId, index)} data-transition={page.transition ?? 'fade'} data-template={page.template} hidden={index !== 0} aria-label={`${number}. ${block.title}`}>
   <PageFrame layout={page.layout} hasSecondary={hasSecondary && !isHub} hasTertiary={hasTertiary && !isHub} hasCaption={hasCaption} hasFooter={hasFooter}>
     <div slot="intro" class="page-intro">
       <p class="page-eyebrow"><span>{number} / {String(edition.pages.length).padStart(2, '0')}</span><span>{block.eyebrow ?? sectionAt(editionId, index)}</span></p>
